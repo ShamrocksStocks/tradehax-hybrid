@@ -1,6 +1,7 @@
 // Initialize EmailJS (replace with your actual EmailJS user ID)
+// Sign up at https://www.emailjs.com/ to get your user ID
 (function() {
-    emailjs.init("YOUR_EMAILJS_USER_ID"); // Replace with your EmailJS user ID
+    emailjs.init("YOUR_EMAILJS_USER_ID"); // TODO: Replace with your EmailJS user ID
 })();
 
 // GSAP Animations
@@ -58,6 +59,7 @@ document.getElementById('repair-form')?.addEventListener('submit', function(e) {
     };
     
     // Send email using EmailJS
+    // TODO: Replace YOUR_SERVICE_ID and YOUR_TEMPLATE_ID with your actual EmailJS service and template IDs
     emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', formData)
         .then(function(response) {
             alert('Quote request submitted! We\'ll contact you at ' + formData.email + ' within 24 hours.');
