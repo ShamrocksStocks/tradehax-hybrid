@@ -1,5 +1,6 @@
-# shamrockstocks.github.io
-landing page temp
+# tradehax-hybrid
+
+Hybrid platform for device repairs, guitar lessons, and market plays—showcasing my skills.
 
 ## Developer setup: Git hooks
 
