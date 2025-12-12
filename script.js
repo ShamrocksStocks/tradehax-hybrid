@@ -71,12 +71,19 @@ document.addEventListener('DOMContentLoaded', function() {
         sectionObserver.observe(section);
     });
 
-    // Add parallax effect to hero
+    // Add parallax effect to hero with throttling for performance
+    let ticking = false;
     window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const scrolled = window.pageYOffset;
+                const hero = document.querySelector('.hero');
+                if (hero) {
+                    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
     });
 
@@ -103,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add hover animations to buttons
-    const buttons = document.querySelectorAll('button, .hover\\:bg-blue-700, .hover\\:bg-green-700');
+    const buttons = document.querySelectorAll('button, a[class*="bg-blue-600"], a[class*="bg-green-600"], a[class*="bg-purple-600"]');
     buttons.forEach(button => {
         button.addEventListener('mouseenter', function() {
             gsap.to(this, {
