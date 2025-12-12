@@ -2,6 +2,22 @@
 
 This landing page is ready to use! Follow these steps to customize it with your own information.
 
+## Key Features
+
+### ✨ Fluid & Interactive Design
+- Smooth scroll navigation with GSAP animations
+- Parallax hero section
+- Hover effects on all interactive elements
+- Dynamic chart updates on hover
+- Gradient text animations
+- Button pulse and float effects
+- Input field glow on focus
+
+### 🔗 Integrated Links
+- **linktr.ee/tradehax.net** - Prominently displayed with all affiliate links and GitHub profile
+- Direct links to GitHub repositories
+- Affiliate integrations (Coinbase, Patreon)
+
 ## Required Customizations
 
 ### 1. EmailJS Setup (for contact form)

@@ -6,7 +6,12 @@
 
 // GSAP Animations
 document.addEventListener('DOMContentLoaded', function() {
-    // Animate hero section
+    // Register ScrollTrigger plugin
+    if (typeof gsap !== 'undefined' && gsap.registerPlugin) {
+        // ScrollTrigger will be loaded if available
+    }
+    
+    // Animate hero section with stagger effect
     gsap.from('.hero h1', {
         duration: 1,
         y: -50,
@@ -31,19 +36,89 @@ document.addEventListener('DOMContentLoaded', function() {
         ease: 'back.out(1.7)'
     });
 
-    // Animate sections on scroll
+    // Animate navigation items on load
+    gsap.from('nav a', {
+        duration: 0.5,
+        y: -20,
+        opacity: 0,
+        stagger: 0.1,
+        delay: 1,
+        ease: 'power2.out'
+    });
+
+    // Animate sections on scroll with intersection observer
     const sections = document.querySelectorAll('section');
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                gsap.from(entry.target, {
+                    duration: 0.8,
+                    y: 50,
+                    opacity: 0,
+                    ease: 'power2.out'
+                });
+                sectionObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
     sections.forEach(section => {
-        gsap.from(section, {
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 0.8,
-            y: 50,
-            opacity: 0,
-            ease: 'power2.out'
+        sectionObserver.observe(section);
+    });
+
+    // Add parallax effect to hero
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+        }
+    });
+
+    // Animate form inputs on focus
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            gsap.to(this, {
+                duration: 0.3,
+                scale: 1.02,
+                boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)',
+                ease: 'power2.out'
+            });
+        });
+        
+        input.addEventListener('blur', function() {
+            gsap.to(this, {
+                duration: 0.3,
+                scale: 1,
+                boxShadow: '0 0 0px rgba(59, 130, 246, 0)',
+                ease: 'power2.out'
+            });
+        });
+    });
+
+    // Add hover animations to buttons
+    const buttons = document.querySelectorAll('button, .hover\\:bg-blue-700, .hover\\:bg-green-700');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            gsap.to(this, {
+                duration: 0.3,
+                scale: 1.05,
+                ease: 'power2.out'
+            });
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            gsap.to(this, {
+                duration: 0.3,
+                scale: 1,
+                ease: 'power2.out'
+            });
         });
     });
 });
@@ -70,7 +145,7 @@ document.getElementById('repair-form')?.addEventListener('submit', function(e) {
         });
 });
 
-// Initialize Crypto Chart
+// Initialize Crypto Chart with animation
 function initCryptoChart() {
     const ctx = document.getElementById('crypto-chart');
     if (!ctx) return;
@@ -84,37 +159,49 @@ function initCryptoChart() {
                 data: [35000, 38000, 42000, 45000, 48000, 52000, 55000],
                 borderColor: 'rgb(255, 159, 64)',
                 backgroundColor: 'rgba(255, 159, 64, 0.1)',
-                tension: 0.4
+                tension: 0.4,
+                fill: true
             },
             {
                 label: 'Ethereum (ETH)',
                 data: [2200, 2400, 2800, 3000, 3200, 3500, 3800],
                 borderColor: 'rgb(75, 192, 192)',
                 backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                tension: 0.4
+                tension: 0.4,
+                fill: true
             },
             {
                 label: 'Top Stock Pick',
                 data: [150, 155, 162, 170, 185, 195, 210],
                 borderColor: 'rgb(153, 102, 255)',
                 backgroundColor: 'rgba(153, 102, 255, 0.1)',
-                tension: 0.4
+                tension: 0.4,
+                fill: true
             }
         ]
     };
     
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
         type: 'line',
         data: cryptoData,
         options: {
             responsive: true,
             maintainAspectRatio: true,
+            animation: {
+                duration: 2000,
+                easing: 'easeInOutQuart'
+            },
             plugins: {
                 legend: {
                     display: true,
                     position: 'top',
                     labels: {
-                        color: '#fff'
+                        color: '#fff',
+                        font: {
+                            size: 14
+                        },
+                        padding: 20,
+                        usePointStyle: true
                     }
                 },
                 title: {
@@ -122,7 +209,30 @@ function initCryptoChart() {
                     text: 'ShamrockStocks Top Picks - YTD Performance',
                     color: '#fff',
                     font: {
-                        size: 16
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: 20
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 2,
+                    padding: 12,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += '$' + context.parsed.y.toLocaleString();
+                            }
+                            return label;
+                        }
                     }
                 }
             },
@@ -130,7 +240,13 @@ function initCryptoChart() {
                 y: {
                     beginAtZero: false,
                     ticks: {
-                        color: '#fff'
+                        color: '#fff',
+                        font: {
+                            size: 12
+                        },
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
                     },
                     grid: {
                         color: 'rgba(255, 255, 255, 0.1)'
@@ -138,14 +254,68 @@ function initCryptoChart() {
                 },
                 x: {
                     ticks: {
-                        color: '#fff'
+                        color: '#fff',
+                        font: {
+                            size: 12
+                        }
                     },
                     grid: {
                         color: 'rgba(255, 255, 255, 0.1)'
                     }
                 }
+            },
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            hover: {
+                mode: 'index',
+                intersect: false
             }
         }
+    });
+
+    // Add chart animation on scroll
+    const chartObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                chart.update();
+                chartObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    chartObserver.observe(ctx);
+
+    // Add dynamic update simulation (optional - for demo purposes)
+    let updateInterval;
+    ctx.addEventListener('mouseenter', () => {
+        // Simulate live data updates on hover
+        updateInterval = setInterval(() => {
+            chart.data.datasets.forEach(dataset => {
+                const lastValue = dataset.data[dataset.data.length - 1];
+                const change = (Math.random() - 0.5) * (lastValue * 0.02);
+                dataset.data.push(lastValue + change);
+                if (dataset.data.length > 10) {
+                    dataset.data.shift();
+                }
+            });
+            chart.data.labels.push('Now');
+            if (chart.data.labels.length > 10) {
+                chart.data.labels.shift();
+            }
+            chart.update('none');
+        }, 2000);
+    });
+
+    ctx.addEventListener('mouseleave', () => {
+        clearInterval(updateInterval);
+        // Reset to original data
+        chart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+        chart.data.datasets[0].data = [35000, 38000, 42000, 45000, 48000, 52000, 55000];
+        chart.data.datasets[1].data = [2200, 2400, 2800, 3000, 3200, 3500, 3800];
+        chart.data.datasets[2].data = [150, 155, 162, 170, 185, 195, 210];
+        chart.update();
     });
 }
 

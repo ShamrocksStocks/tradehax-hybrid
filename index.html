@@ -5,16 +5,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="TradeHax Hybrid: Expert device repairs/customization, guitar lessons & clips, stock/crypto watchlists & plays. Remote services via TeamViewer.">
     <title>TradeHax Hybrid: Repairs, Music, Markets | ShamrockStocks</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" integrity="sha384-EhmY3qpjUzGUXbByPnUsA9sD0aFf3z8cLTGBVsrh3kz0cP8uyW1TAfpEX1pBKEYG" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha384-G8v7c+OtYs7UzU5t9DhBD0i/8xPfZxvdwbLpSEbK6JEGLqQMFYBVrEfmJdLqOVn8" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-FulkMFLl5PQHJPsP7y2I3gLKL5+zcr3W3kvcYSvD8bxTHfY3x8RfCGqVY7fLLnqL" crossorigin="anonymous"></script>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <style>
+        /* Smooth transitions for all interactive elements */
+        * {
+            transition: all 0.3s ease;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Navbar animation on scroll */
+        nav {
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        /* Link hover effects */
+        a {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #60a5fa;
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* Button pulse animation */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        button:hover, .bg-blue-600:hover, .bg-green-600:hover {
+            animation: pulse 1s infinite;
+        }
+        
+        /* Floating animation for hero CTAs */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hero a {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .hero a:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        /* Card hover effect */
+        .grid > div {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .grid > div:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Input focus glow */
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            transform: scale(1.02);
+        }
+        
+        /* Gradient text animation */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        h1, h2 {
+            background: linear-gradient(45deg, #60a5fa, #34d399, #60a5fa);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 5s ease infinite;
+        }
+        
+        /* Chart container glow */
+        #crypto-chart {
+            transition: all 0.3s ease;
+        }
+        
+        #crypto-chart:hover {
+            box-shadow: 0 0 40px rgba(75, 192, 192, 0.5);
+        }
+        
+        /* Section fade-in */
+        section {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        section:nth-child(1) { animation-delay: 0.1s; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+        section:nth-child(4) { animation-delay: 0.4s; }
+        
+        /* Loading shimmer effect */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-white font-sans">
     <header class="hero relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://source.unsplash.com/random/1920x1080/?tech-music-finance');">
         <div class="text-center z-10">
             <h1 class="text-5xl font-bold mb-4">TradeHax Hybrid</h1>
             <p class="text-2xl mb-6">Customizing 300+ phones/computers remotely via TeamViewer, teaching guitar with 25+ years experience, and sharing stock/crypto plays—all virtual or shipped. Powered by ShamrockStocks.</p>
+            <div class="mb-6">
+                <a href="https://linktr.ee/tradehax.net" class="inline-block bg-purple-600 px-8 py-4 rounded-lg hover:bg-purple-700 text-xl font-bold shadow-lg" target="_blank">
+                    🔗 All My Links & Affiliates
+                </a>
+            </div>
             <a href="https://www.teamviewer.com/en/download/" class="bg-blue-600 px-6 py-3 rounded hover:bg-blue-700">Get TeamViewer for Repairs</a>
             <a href="#repairs" class="ml-4 bg-green-600 px-6 py-3 rounded hover:bg-green-700">Book Service</a>
         </div>
@@ -75,9 +215,10 @@
                 <p id="quote-result" class="mt-2"></p>
             </div>
             <div class="p-4 bg-gray-700 rounded">
-                <h3 class="text-xl mb-2">GitHub Repos & Legacy</h3>
-                <a href="https://github.com/ShamrocksStocks" class="block text-blue-400 mb-2">View Projects</a>
-                <a href="https://github.com/ShamrocksStocks/shamrockstocks.github.io/tree/main/legacy-backup" class="block text-blue-400">Old Stocks Archive</a>
+                <h3 class="text-xl mb-2">GitHub Repos & All Links</h3>
+                <a href="https://github.com/ShamrocksStocks" class="block text-blue-400 mb-2 hover:text-blue-300">📁 View GitHub Projects</a>
+                <a href="https://linktr.ee/tradehax.net" class="block text-purple-400 mb-2 hover:text-purple-300" target="_blank">🔗 All Affiliates & Links</a>
+                <a href="https://github.com/ShamrocksStocks/shamrockstocks.github.io/tree/main/legacy-backup" class="block text-blue-400 hover:text-blue-300">📊 Old Stocks Archive</a>
             </div>
         </div>
         <!-- TODO: Replace YOUR_USER with your actual Patreon username -->
@@ -85,8 +226,8 @@
     </section>
 
     <footer class="py-8 px-8 bg-gray-900 text-center">
-        <a href="https://linktr.ee/tradehax" class="text-blue-400 mr-4">Full Links</a>
-        <a href="https://github.com/ShamrocksStocks/shamrockstocks.github.io" class="text-blue-400">Fork Repo</a> | © 2025 TradeHax | ShamrockStocks
+        <a href="https://linktr.ee/tradehax.net" class="text-blue-400 mr-4 hover:text-blue-300 transition-colors">Full Links & Affiliates</a>
+        <a href="https://github.com/ShamrocksStocks/shamrockstocks.github.io" class="text-blue-400 hover:text-blue-300 transition-colors">Fork Repo</a> | © 2025 TradeHax | ShamrockStocks
     </footer>
 
     <script src="script.js"></script>
